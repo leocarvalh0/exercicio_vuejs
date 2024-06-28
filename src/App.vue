@@ -1,47 +1,71 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { reactive } from 'vue';
+import Formulario from './components/Formulario.vue';
+import Resultado from './components/Resultado.vue';
+
+  const estado = reactive({
+    num1: 0,
+    num2: 0,
+    filtro: 'selecione',
+  })
+
+  const somar = () => {
+    const resultado = Number(estado.num1) + Number(estado.num2);
+    return resultado;
+  }
+
+  const subtrair = () => {
+    const resultado = Number(estado.num1) - Number(estado.num2);
+    return resultado;
+  }
+
+  const multiplicar = () => {
+    const resultado = Number(estado.num1) * Number(estado.num2);
+    return resultado;
+  }
+
+  const dividir = () => {
+    const resultado = Number(estado.num1) / Number(estado.num2);
+    return resultado;
+  }
+
+  const trocarFiltro = () => {
+    const { filtro } = estado;
+
+    switch (filtro) {
+      case 'somar':
+        return somar();
+      case 'subtrair':
+        return subtrair();
+      case 'multiplicar':
+        return multiplicar();
+      default:
+        return dividir();
+    }
+  }
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container">
+    <h1>Calcule</h1>
+    <Formulario :retorna-num1="evento => estado.num1 = evento.target.value" :retorna-num2="evento => estado.num2 = evento.target.value" :trocar-filtro="evento => estado.filtro = evento.target.value" />
+    <Resultado :trocar-filtro="trocarFiltro()" :filtro="estado.filtro"/>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .container {
+    font-family: sans-serif;
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: #000;
+    color: #fff;
+    padding: 60px;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  h1 {
+    font-size: 40px;
+    margin-bottom: 40px;
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
